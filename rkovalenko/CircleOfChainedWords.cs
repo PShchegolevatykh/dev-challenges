@@ -9,9 +9,10 @@
             {
                 dict.AddOrIncrementValue(word[0]);
                 dict.AddOrIncrementValue(word[^1]);
+
             }
 
-            return dict.All(pair => pair.Value == 2);
+            return dict.All(pair => pair.Value % 2 == 0);
         }
 
         private static void AddOrIncrementValue(this Dictionary<char, int> dictionary, char key)
