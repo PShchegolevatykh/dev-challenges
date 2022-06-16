@@ -13,7 +13,7 @@
             var count = listOfWords.Count;
             for(var i = 1; i < count;)
             {
-                // compare last char of one word and the first char of second word
+                // compare last char of one word and the first char of the second word
                 if (listOfWords[startingWordIndex][^1] == listOfWords[i][0])
                 {
                     if(i - startingWordIndex > 1)
@@ -67,7 +67,8 @@
             // check if the words can be chained through here
             for(var i = 1; i < length; ++i)
             {
-                if(lastChar == listOfWords[i][0])
+                var currentFirstChar = listOfWords[i][0];
+                if (lastChar == currentFirstChar)
                 {
                     ++hitCount;
                     lastChar = listOfWords[i][^1];
@@ -75,14 +76,14 @@
                     i = -1;
                 }
 
-                if (hitCount == length - 1)
+                if (hitCount == length)
                 {
                     return true;
                 }
 
             }
 
-            return false;
+            return listOfWords[0][0] == listOfWords[^1][^1];
         }
     }
 }
