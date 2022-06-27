@@ -12,20 +12,23 @@
                 return new List<IList<int>>();
             }
 
+            Array.Sort(nums);
+
             List<Tripple> tripples = new List<Tripple>();
 
             // create dictionary with elements to search
             Dictionary<int, int> numsDictionary = new();
-            for (int i = 0; i < nums.Length; i++)
-            {
-                if (!numsDictionary.ContainsKey(nums[i]))
-                {
-                    numsDictionary.Add(nums[i], i);
-                }
-            }
 
-            for (int i = 0; i < nums.Length - 1; i++)
+            // use pointers to decrease number of iterations
+            // take the first element and add it to dictionary and then use this element to find couple of elements which will give us 0
+            for (int i = 1; i < nums.Length - 1; i++)
             {
+                var k = i - 1;
+                if (!numsDictionary.ContainsKey(nums[k]))
+                {
+                    numsDictionary.Add(nums[k], k);
+                }
+
                 for (int j = i + 1; j < nums.Length; j++)
                 {
                     // get a sum of addition i + j and change sign, so we can find an element that will give us 0 as a result
@@ -35,7 +38,7 @@
                     {
                         var tripple = new Tripple(nums[i], nums[j], sum);
                         // verify the element isn't a duplicate and that the condition i!=j && i!=k && j!=k is valid
-                        if (!tripples.Contains(tripple) && i != numsDictionary[sum] && j != numsDictionary[sum])
+                        if (i != numsDictionary[sum] && j != numsDictionary[sum] && !tripples.Contains(tripple))
                         {
                             tripples.Add(tripple);
                         }
@@ -66,9 +69,8 @@
             new List<int> { I, J, K };
 
         public bool Equals(Tripple other) =>
-            (this.I == other.I || this.I == other.J || this.I == other.K)
-            && (this.J == other.J || this.J == other.K || this.J == other.I)
-            && (this.K == other.K || this.K == other.J || this.K == other.I);
+            this.I == other.I && this.J == other.J && this.K == other.K;
+
 
         public override string ToString()
         {
