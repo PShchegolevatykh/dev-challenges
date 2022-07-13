@@ -15,15 +15,15 @@ namespace CycledLinkedList
                 return false;
             }
 
-            Dictionary<ListNode, int> occurrencesDictionary = new Dictionary<ListNode, int>();
+            HashSet<ListNode> occurrencesSet = new HashSet<ListNode>();
             while (head.next != null)
             {
-                if (occurrencesDictionary.ContainsKey(head))
+                if (occurrencesSet.Contains(head))
                 {
                     return true;
                 }
 
-                occurrencesDictionary.Add(head, 1);
+                occurrencesSet.Add(head);
                 head = head.next;
             }
 
