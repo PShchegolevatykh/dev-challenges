@@ -9,52 +9,51 @@ Notice that the solution set must not contain duplicate triplets.
 
 Solution:
 
-We need to operate three pointers (three indices) for the given array.
-We will iterate through the numbers in array with three "for" loops starting with 0 for i, 1 for j, 2 for k.
-We can use Dictionary to store "sorted" tuple of three ints with boolean value meaning the sum for these indices is 0 (O(1) add time).
-Each time before calculation we can check in the dict if such indices were already used previously (O(1) key lookup time), thus we get rid of repetitions.
-If indices were not used previously, add them to the dictionary.
-If the condition is met (indices are not equal and the sum of three numbers is 0), add tuple to the result list.
+Brute-force solution is to operate three pointers (three indices) and thus perform 3 loop iterations for the given array.
+Though more optimal solution is to use two loops and instead of third loop we will use memoization of existing elements in a hashset. 
+For each nums[i] and nums[j] we will check if there is an existing element in between these two pointers, 
+such that the sum of the three is zero.
+
+Uniqueness of results will be proved by having a hashset of sorted indices (basically, tuples of three).
+.
 */
-
-Tuple<int, int, int> MakeSortedTuple(IList<int> nums)
+IList<IList<int>> ThreeSum(int[] nums) 
 {
-    var numbers = nums.ToArray();
-    Array.Sort(numbers);
-    return new Tuple<int, int, int>(numbers[0], numbers[1], numbers[2]);
-}
+    if (nums==null || nums.Length<3) throw new ArgumentException(nameof(nums));
 
-IList<IList<int>> ThreeSum(int[] nums) {
+    var result = new List<IList<int>>();
+    var htResults = new HashSet<Tuple<int,int,int>>();
 
-    int i=0; int j=1; int k=2;
-    var htIndicesSum = new Dictionary<Tuple<int,int,int>, bool>();
-    var result = new List<IList<int>>();    
-
-    for (i=0; i<nums.Length; i++)
+    // Existing numbers between nums[i] and nums[j]
+    for(int i=0; i<nums.Length-2; i++)
     {
-        for(j=1; j<nums.Length; j++)
+        int target = 0 - nums[i];
+        var htExistingNumbers = new HashSet<int>();
+        
+        for(int j=i+1; j<nums.Length; j++)
         {
-            for(k=2; k<nums.Length; k++)
-            {                
-                if (i!=j && i!=k && k!=j)
+            if(htExistingNumbers.Contains(target-nums[j]))
+            {
+                var array = new[]{nums[i], target-nums[j], nums[j]};
+                Array.Sort(array);
+                var resultTuple = new Tuple<int, int, int>(array[0], array[1], array[2]);
+                if (!htResults.Contains(resultTuple))
                 {
-                    var sortedTuple = MakeSortedTuple(new[] { nums[i], nums[j], nums[k] });
-                    if(!htIndicesSum.ContainsKey(sortedTuple))
-                    {
-                        htIndicesSum[sortedTuple] = true;
-                        if (nums[i] + nums[j] + nums[k] == 0)
-                        {
-                            result.Add(new [] { nums[i], nums[j], nums[k]});
-                        }
-                    }
-                }                
+                    htResults.Add(resultTuple);
+                    result.Add(array);
+                }
+            }
+            else
+            {
+                htExistingNumbers.Add(nums[j]);
             }
         }
     }
-    return result;
+    return result;    
 }
 
-int [] nums = new[] {-2,0,1,1,2};
+
+int [] nums = new[] {-1,0,1,2,-1,-4};
 
 var result = ThreeSum(nums);
 
@@ -62,4 +61,5 @@ foreach(var arr in result)
 {
     Console.Write($"{arr[0]} {arr[1]} {arr[2]}\n");
 }
+
 
