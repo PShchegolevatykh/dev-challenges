@@ -17,56 +17,49 @@ If indices were not used previously, add them to the dictionary.
 If the condition is met (indices are not equal and the sum of three numbers is 0), add tuple to the result list.
 */
 
-using System.Linq;
-
-bool IsUsed(Dictionary<Tuple<int,int,int>, bool> dictIndicesSum, int num1, int num2, int num3)
-{    
-    var sortedTuple = MakeSortedTuple(num1, num2, num3);
-    return dictIndicesSum.ContainsKey(sortedTuple);
-}
-
-Tuple<int, int, int> MakeSortedTuple(int num1, int num2, int num3)
+Tuple<int, int, int> MakeSortedTuple(IList<int> nums)
 {
-    var indices = new int[] { num1, num2, num3 };
-    Array.Sort(indices);
-    return new Tuple<int, int, int>(indices[0], indices[1], indices[2]);
+    var numbers = nums.ToArray();
+    Array.Sort(numbers);
+    return new Tuple<int, int, int>(numbers[0], numbers[1], numbers[2]);
 }
 
-IList<Tuple<int,int,int>> ThreeSum(int[] nums) {
+IList<IList<int>> ThreeSum(int[] nums) {
 
     int i=0; int j=1; int k=2;
-    var dictIndicesSum = new Dictionary<Tuple<int,int,int>, bool>();
-    var result = new List<Tuple<int, int, int>>();    
+    var htIndicesSum = new Dictionary<Tuple<int,int,int>, bool>();
+    var result = new List<IList<int>>();    
 
     for (i=0; i<nums.Length; i++)
     {
         for(j=1; j<nums.Length; j++)
         {
             for(k=2; k<nums.Length; k++)
-            {
-                if(!IsUsed(dictIndicesSum, i, j, k))
+            {                
+                if (i!=j && i!=k && k!=j)
                 {
-                    var sum = nums[i] + nums[j] + nums[k];
-                    var tuple = MakeSortedTuple(i,j,k);
-                    var condition = i!=j && i!=k && k!=j && sum == 0;
-                    dictIndicesSum[tuple] = condition;
-                    if (condition)
+                    var sortedTuple = MakeSortedTuple(new[] { nums[i], nums[j], nums[k] });
+                    if(!htIndicesSum.ContainsKey(sortedTuple))
                     {
-                        result.Add(tuple);
-                    } 
-                }
+                        htIndicesSum[sortedTuple] = true;
+                        if (nums[i] + nums[j] + nums[k] == 0)
+                        {
+                            result.Add(new [] { nums[i], nums[j], nums[k]});
+                        }
+                    }
+                }                
             }
         }
     }
     return result;
 }
 
-int [] nums = new[] { -1, 0, 1, 2, -1, -4};
+int [] nums = new[] {-2,0,1,1,2};
 
 var result = ThreeSum(nums);
 
-foreach(var triplet in result)
+foreach(var arr in result)
 {
-    Console.Write($"{triplet.Item1} {triplet.Item2} {triplet.Item3}\n");
+    Console.Write($"{arr[0]} {arr[1]} {arr[2]}\n");
 }
 
