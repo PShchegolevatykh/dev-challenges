@@ -5,6 +5,35 @@ Given the head of a singly linked list, reverse the list, and return the reverse
 Example:
 Input: head = [1,2,3,4,5]
 Output: [5,4,3,2,1]
+
+
+-------------------------------
+
+
+Solution:
+
+Here is a layout for our linked list:
+(1) -> (2) -> (3) -> (4) -> (5) ->
+
+
+We will iterate through our linked list with a while cycle.
+
+We will need two pointers to reverse our linked list.
+One for  "previously" visited node (prev), and one for "current" node (cur). 
+
+We will start with prev = null and cur = first node.
+
+     (1) -> (2) -> (3) -> (4) -> (5) ->
+^     ^
+|     |
+prev  cur
+
+On each iteration step we will retarget "current" node onto the "previous" node, 
+but before we will memoize what was the node's Next value into "memoized" variable.
+
+Then we'll proceed to the next element, updating "prev" and "cur" pointers to "cur" and "memoized" respectively, 
+until there is no next element available.  
+
 */
 
 
