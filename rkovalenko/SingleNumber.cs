@@ -2,7 +2,7 @@ public class Solution {
     public int SingleNumber(int[] nums) {
         Array.Sort(nums);
 
-        if(nums.Length < 3)
+        if(nums.Length < 2)
         {
             return nums[0];
         }
