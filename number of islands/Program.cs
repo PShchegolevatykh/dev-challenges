@@ -100,7 +100,7 @@ public class Solution {
         {
             for (int y=0; y<height; y++)
             {
-                var curr = Tuple.Create(x,y);
+                var curr = Tuple.Create(x,y); // current cell (node), starting from (0, 0)
                 if (visited.ContainsKey(curr))
                     continue;
                 
@@ -117,11 +117,20 @@ public class Solution {
                         if (!visited.ContainsKey(curr))
                             visited.Add(curr, true);
 
-                        foreach(var next in GetNextLand(curr, grid))
+                                var directions = new [] { Tuple.Create(1,0), Tuple.Create(0,1), Tuple.Create(-1,0), Tuple.Create(0,-1) };
+                        
+                        foreach(var dir in directions)
                         {
-                            if (!visited.ContainsKey(next))                            
-                                stack.Push(next);
-                        }
+                            int nx = (curr.Item1 + dir.Item1); // next x
+                            int ny = (curr.Item2 + dir.Item2); // next y
+
+                            if(0 <= nx && nx < width && 0 <= ny && ny < height && grid[ny][nx] == '1')
+                            {
+                                var next = Tuple.Create(nx, ny);
+                                if (!visited.ContainsKey(next))                            
+                                    stack.Push(next);
+                            }
+                        }                        
                     }
                     islandsCount++;                        
                 }
@@ -129,24 +138,5 @@ public class Solution {
         }
  
         return (char)islandsCount;
-    }
-
-    public IEnumerable<Tuple<int,int>> GetNextLand(Tuple<int,int> curr, char[][] grid)
-    {
-        int height = grid.Length;
-        int width = grid[0].Length;       
-        
-        // traverse order: right, downwards, left, upwards 
-        var directions = new [] { Tuple.Create(1,0), Tuple.Create(0,1), Tuple.Create(-1,0), Tuple.Create(0,-1) };
-        foreach(var dir in directions)
-        {
-            int x = (curr.Item1 + dir.Item1);
-            int y = (curr.Item2 + dir.Item2);
-
-            if(0 <= x && x < width && 0 <= y && y < height && grid[y][x] == '1')
-            {
-                yield return Tuple.Create(x, y);
-            }
-        }
     }
 }
