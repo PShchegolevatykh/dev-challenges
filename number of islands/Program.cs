@@ -98,6 +98,7 @@ public class Solution {
         Debug.Assert(height>0 && width>0);
 
         var visited = new Dictionary<Tuple<int,int>, bool>();
+        // directions: to the right, downwards, to the left, upwards
         var directions = new [] { Tuple.Create(1,0), Tuple.Create(0,1), Tuple.Create(-1,0), Tuple.Create(0,-1) };
 
         int islandsCount = 0;
@@ -122,19 +123,22 @@ public class Solution {
                         if (!visited.ContainsKey(curr))
                             visited.Add(curr, true);                        
                         
+                        // look for adjacent land cells to the right, downwards, to the left and upwards
                         foreach(var dir in directions)
                         {
-                            int nx = (curr.Item1 + dir.Item1); // next x
-                            int ny = (curr.Item2 + dir.Item2); // next y
+                            int ax = (curr.Item1 + dir.Item1); // adjacent x
+                            int ay = (curr.Item2 + dir.Item2); // adjacent y
 
-                            if(0 <= nx && nx < width && 0 <= ny && ny < height && grid[ny][nx] == '1')
+                            // adjacent cell coords should be within matrix
+                            if(0 <= ax && ax < width && 0 <= ay && ay < height && grid[ay][ax] == '1')
                             {
-                                var next = Tuple.Create(nx, ny);
+                                var next = Tuple.Create(ax, ay);
                                 if (!visited.ContainsKey(next))                            
                                     stack.Push(next);
                             }
                         }                        
                     }
+                    // island is traversed
                     islandsCount++;                        
                 }
             }
