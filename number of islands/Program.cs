@@ -40,6 +40,9 @@ So, when we found an "unvisited" island:
     Each such adjacent "land piece" we will put in a stack.
     We will process items in the stack until it's empty.
     Then we will increase the number of islands.
+
+The time complexity will be O(N) since we iterate over each cell in matrix and track visited nodes in dictionary when processing.
+The space complexity will be also O(N).
 */
 
 using System.Diagnostics;
@@ -83,6 +86,7 @@ public static class Tests
     }
 }
 
+
 public class Solution {
     public char NumIslands(char[][] grid) {
 
@@ -94,6 +98,7 @@ public class Solution {
         Debug.Assert(height>0 && width>0);
 
         var visited = new Dictionary<Tuple<int,int>, bool>();
+        var directions = new [] { Tuple.Create(1,0), Tuple.Create(0,1), Tuple.Create(-1,0), Tuple.Create(0,-1) };
 
         int islandsCount = 0;
         for (int x=0; x<width; x++)
@@ -115,9 +120,7 @@ public class Solution {
                     {
                         curr = stack.Pop();                            
                         if (!visited.ContainsKey(curr))
-                            visited.Add(curr, true);
-
-                                var directions = new [] { Tuple.Create(1,0), Tuple.Create(0,1), Tuple.Create(-1,0), Tuple.Create(0,-1) };
+                            visited.Add(curr, true);                        
                         
                         foreach(var dir in directions)
                         {
